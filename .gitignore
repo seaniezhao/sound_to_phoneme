@@ -1,3 +1,6 @@
 *.wav
+*.pyc
 *.npy
 *.txt
+*.interval
+snapshots/
