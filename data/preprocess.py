@@ -5,6 +5,8 @@ import numpy as np
 hop = 256
 sample_rate = 32000
 
+num = 86
+
 def process_wav(path):
 
     y, osr = librosa.load(path, sr=None)
@@ -41,7 +43,12 @@ def process_label(label_path):
             print(line)
             small_array.append(line)
             if count%3 == 0:
-                phn = small_array[2]
+                phn = small_array[2].replace('\"','')
+                if phn == 'sp1':
+                    phn = 'sil'
+                print(phn[-1])
+                if phn[-1].isdigit():
+                    phn = phn[:-1]
 
                 tup = (float(small_array[0]) * sample_rate/hop, float(small_array[1]) * sample_rate/hop, phn)
                 time_phon_list.append(tup)
@@ -58,6 +65,7 @@ def process_label(label_path):
 
 def final_process(time_phon_list, mfcc, all_phon):
     oh_list = []
+    idx_list = []
     for i in range(mfcc.shape[1]):
         cur_phn = 0
         for j in range(len(time_phon_list)):
@@ -70,9 +78,11 @@ def final_process(time_phon_list, mfcc, all_phon):
         cur_phn_oh[cur_phn] = 1
 
         oh_list.append(cur_phn_oh)
-        print(len(oh_list[-1]), oh_list[-1])
+        idx_list.append(cur_phn)
+        print(cur_phn)
+        #print(len(oh_list[-1]), oh_list[-1])
 
-    return oh_list
+    return idx_list
 
 
 def restore_phonetic(catagroy_list):
@@ -82,16 +92,34 @@ def restore_phonetic(catagroy_list):
 
 if __name__ == '__main__':
     save_folder = 'prepared_data/'
+    wav_folder = 'Wave/'
+    label_folder = 'PhoneLabeling/'
 
-    path = '/Users/zhaowenxiao/pythonProj/sound_to_phoneme/data/Wave/000001.wav'
-    mfcc = process_wav(path)
+    infos = []
+    all_phon = []
+    for i in range(10000):
+        file_name = str(i+1).zfill(6)
 
-    l_path = '/Users/zhaowenxiao/pythonProj/sound_to_phoneme/data/PhoneLabeling/000001.interval'
-    time_phon_list, phon_list = process_label(l_path)
+        w_path = wav_folder+file_name+'.wav'
+        l_path = label_folder+file_name+'.interval'
+        mfcc = process_wav(w_path)
+        time_phon_list, phon_list = process_label(l_path)
+        for p in phon_list:
+            if p not in all_phon:
+                all_phon.append(p)
 
-    oh_label = final_process(time_phon_list, mfcc, phon_list)
+        infos.append((file_name, mfcc, time_phon_list))
 
-    np.save(save_folder + 'data.npy', mfcc)
-    np.save(save_folder + 'label.npy', oh_label)
+    np.save('all_phn.npy', all_phon)
+    for item in infos:
+        file_name, mfcc, time_phon_list = item
+        label = final_process(time_phon_list, mfcc, all_phon)
+
+        np.save(save_folder + file_name + '_data.npy', mfcc)
+        np.save(save_folder + file_name + '_label.npy', label)
+
+
+
+
 
 
