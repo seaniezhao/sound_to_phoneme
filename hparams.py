@@ -11,7 +11,7 @@ def create_hparams(hparams_string=None, verbose=False):
         residual_channels=128,
         skip_channels=256,
         input_channel=24,
-        output_channel=15,
+        output_channel=86,
         initial_kernel=1,
         kernel_size=2,
         bias=True
