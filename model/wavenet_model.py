@@ -138,11 +138,13 @@ class WaveNetModel(nn.Module):
         data = np.pad(input, ((0, 0), (to_pad, to_pad)), 'constant', constant_values=0)
 
         preds = []
+        raw_out = []
         for i in range(real_length):
             model_input = data[:, i:i+self.receptive_field]
             model_input = torch.FloatTensor(model_input).unsqueeze(0).to(self.device)
             out = self.forward(model_input)
+            raw_out.append(out.detach().squeeze())
             pred = out.max(1)[1]
             preds.append(pred.squeeze())
 
-        return preds
+        return preds, raw_out
