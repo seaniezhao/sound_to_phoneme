@@ -15,7 +15,7 @@ print('the dataset has ' + str(len(data)) + ' items')
 
 trainer = ModelTrainer(model=model,
                          dataset=data,
-                         lr=0.0005,
+                         lr=0.00001,
                          weight_decay=0.0,
                          snapshot_path='./snapshots',
                          snapshot_name='stp_model',

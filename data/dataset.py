@@ -40,7 +40,7 @@ class STPDataset(torch.utils.data.Dataset):
             self.datas.append((p_data, label))
 
             #test
-            break
+            #break
 
     def __getitem__(self, idx):
 

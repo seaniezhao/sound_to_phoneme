@@ -140,7 +140,7 @@ class WaveNetModel(nn.Module):
         preds = []
         for i in range(real_length):
             model_input = data[:, i:i+self.receptive_field]
-            model_input = torch.FloatTensor(model_input).unsqueeze(0)
+            model_input = torch.FloatTensor(model_input).unsqueeze(0).to(self.device)
             out = self.forward(model_input)
             pred = out.max(1)[1]
             preds.append(pred.squeeze())
