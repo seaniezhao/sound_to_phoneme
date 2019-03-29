@@ -5,7 +5,7 @@ data source from http://www.data-baker.com/open_source.html
 中文语音数据 http://www.data-baker.com/open_source.html
 ### 测试例子 
 #### target:
-0
+0<br>
 0.335
 "sil"
 0.335
