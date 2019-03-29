@@ -4,9 +4,9 @@
 data source from http://www.data-baker.com/open_source.html
 中文语音数据 http://www.data-baker.com/open_source.html
 ### test result 
-  (0, 336, 'sil')
-  (336, 448, 'i')
-  (448, 488, 'g')
+  (0, 336, 'sil')  
+  (336, 448, 'i')  
+  (448, 488, 'g')  
   (488, 600, 'e')
   (600, 784, 've')
   (784, 864, 'h')
