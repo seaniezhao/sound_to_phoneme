@@ -84,22 +84,25 @@ def get_phoneme(pinyins, all_phn):
     return phns
 
 
-def get_phoneme_timing(mfcc, pinyins):
+def get_phoneme_timing(mfcc, pinyins=None):
 
     all_phn = list(np.load('data/all_phn.npy'))
 
     model = load_latest_model_from('snapshots')
     phn_list, raw_out = model.get_phonetic(mfcc)
-    sorted_outs = []
-    for x in raw_out:
-        p_x, s_x = F.softmax(x, dim=0).sort(descending=True)
-        phn_array = []
-        for item in s_x:
-            phn_array.append(all_phn[item])
-        sorted_outs.append(phn_array)
 
-    _label = get_phoneme(pinyins, all_phn)
-    phn_list = post_process(sorted_outs, _label, list(all_phn))
+    if pinyins!= None:
+        sorted_outs = []
+        for x in raw_out:
+            p_x, s_x = F.softmax(x, dim=0).sort(descending=True)
+            phn_array = []
+            for item in s_x:
+                phn_array.append(all_phn[item])
+            sorted_outs.append(phn_array)
+            #print(phn_array)
+            #print(list(p_x.cpu().numpy()))
+        _label = get_phoneme(pinyins, all_phn)
+        phn_list = post_process(sorted_outs, _label, list(all_phn))
 
     phn_timing = get_time(phn_list, all_phn)
 
@@ -111,7 +114,7 @@ if __name__ == '__main__':
     model = load_latest_model_from('snapshots')
 
     #mfcc = process_wav('data/dao_shu.wav')
-    data = np.load('data/prepared_data/009002_data.npy')
+    data = np.load('data/prepared_data/009885_data.npy')
     phn_list, raw_out = model.get_phonetic(data)
 
     phn_timing = get_time(phn_list, all_phn)
@@ -131,7 +134,7 @@ if __name__ == '__main__':
         print(phn_array)
         print(list(p_x.cpu().numpy()))
 
-    label = np.load('data/prepared_data/009002_label.npy')
+    label = np.load('data/prepared_data/009885_label.npy')
     _label = []
 
     pre = None

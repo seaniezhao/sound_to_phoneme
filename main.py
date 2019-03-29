@@ -2,9 +2,12 @@ from inference import *
 
 
 # wav and pinyin to timed phonome
-mfcc = process_wav('data/Wave/000001.wav')
+#mfcc = process_wav('data/daoshu.wav')
 
-phn_timing = get_phoneme_timing(mfcc, ['ka','er','pu','pei','wai','sun','wan','hua','ti'])
+
+mfcc = process_wav('data/Wave/008890.wav')
+pinyin = ['yi', 'ge', 'yue', 'hou', 'di', 'zhi', 'lian', 'meng', 'wa', 'jie']
+phn_timing = get_phoneme_timing(mfcc, pinyin)
 
 for i in phn_timing:
     print(i)
